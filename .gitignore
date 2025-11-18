@@ -1,0 +1,8 @@
+# Build artifacts
+/target
+**/target
+
+# Temporary files
+*.rs.bk
+*.swp
+.DS_Store

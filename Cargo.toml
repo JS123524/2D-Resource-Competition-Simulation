@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "rcs_app",
+    "rcs_core",
+]
+
+resolver = "2"

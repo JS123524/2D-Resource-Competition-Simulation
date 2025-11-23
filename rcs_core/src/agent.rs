@@ -85,6 +85,14 @@ impl Agent {
     pub fn cid(&self) -> usize {
         self.cid
     }
+
+    pub fn is_alive(&self) -> bool {
+        self.alive
+    }
+
+    pub fn is_hungry(&self) -> bool {
+        self.allocated_resource < self.consumption_rate
+    }
 }
 
 impl Updatable for Agent {

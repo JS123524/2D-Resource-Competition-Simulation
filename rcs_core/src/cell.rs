@@ -59,6 +59,10 @@ impl Cell {
     pub fn id(&self) -> usize {
         self.id
     }
+
+    pub fn cur_resource(&self) -> u32 {
+        self.cur_resource
+    }
 }
 
 impl Updatable for Cell {

@@ -25,8 +25,71 @@ impl World {
         }
     }
 
+    pub fn size(&self) -> (usize, usize) {
+        self.size
+    }
+
+    pub fn cells(&self) -> &[Cell] {
+        &self.cells
+    }
+
+    pub fn cell(&self, cid: usize) -> &Cell {
+        &self.cells[cid]
+    }
+
+    pub fn agents(&self) -> &[Agent] {
+        &self.agents
+    }
+
+    pub fn max_agents(&self) -> usize {
+        self.max_agents
+    }
+
+    pub fn make_world(width: usize, height: usize, max_agents: usize) -> Self {
+        assert!(width > 0 && height > 0, "world size must be > 0");
+        assert!(max_agents > 0, "max_agents must be > 0");
+
+        let mut cells = Vec::with_capacity(width * height);
+        let max_resource: u32 = 20;
+        let max_regen_rate: u32 = 3;
+
+        let mut rng = rand::thread_rng();
+
+        for y in 0..height {
+            for x in 0..width {
+                let id = y * width + x;
+                let rand_resource = rng.gen_range(0..=max_resource);
+                let rand_regen_rate = rng.gen_range(0..=max_regen_rate);
+
+                cells.push(Cell::new(
+                    id,
+                    rand_resource,
+                    max_resource,
+                    rand_regen_rate,
+                    max_regen_rate,
+                ));
+            }
+        }
+
+        let num_agents = rng.gen_range(1..=max_agents);
+        let mut agents = Vec::with_capacity(num_agents);
+        let max_consumption_rate: u32 = 5;
+
+        for id in 0..num_agents {
+            let rand_x = rng.gen_range(0..width);
+            let rand_y = rng.gen_range(0..height);
+            let cid = rand_y * width + rand_x;
+            let rand_consumption_rate = rng.gen_range(1..=max_consumption_rate);
+
+            agents.push(Agent::new(id, cid, rand_consumption_rate, 0, 3, true));
+        }
+
+        World::new((width, height), cells, agents, max_agents)
+    }
+
     pub fn make_simple_world() -> Self {
-        let (width, height) = (10, 10);
+        /*
+        let (width, height) = (20, 20);
         let mut cells = Vec::with_capacity(width * height);
 
         let max_resource: u32 = 20;
@@ -42,8 +105,6 @@ impl World {
 
                 cells.push(Cell::new(
                     id,
-                    (x as u32, y as u32),
-                    (1, 1),
                     rand_resource,
                     max_resource,
                     rand_regen_rate,
@@ -63,18 +124,12 @@ impl World {
             let cid = rand_y * width + rand_x;
             let rand_consumption_rate = rng.gen_range(1..=max_consumption_rate);
 
-            agents.push(Agent::new(
-                id,
-                cid,
-                (rand_x as u32, rand_y as u32),
-                rand_consumption_rate,
-                0,
-                3,
-                true,
-            ));
+            agents.push(Agent::new(id, cid, rand_consumption_rate, 0, 3, true));
         }
 
         World::new((width, height), cells, agents, max_agents)
+        */
+        Self::make_world(20, 20, 50)
     }
 
     fn neighbor_cells_info(&self, cid: usize) -> Vec<(usize, u32)> {

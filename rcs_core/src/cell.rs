@@ -3,8 +3,6 @@ use crate::traits::Updatable;
 
 pub struct Cell {
     id: usize,
-    position: (u32, u32),
-    size: (u32, u32),
     cur_resource: u32,
     max_resource: u32,
     regen_rate: u32,
@@ -14,8 +12,6 @@ pub struct Cell {
 impl Cell {
     pub fn new(
         id: usize,
-        position: (u32, u32),
-        size: (u32, u32),
         cur_resource: u32,
         max_resource: u32,
         regen_rate: u32,
@@ -23,8 +19,6 @@ impl Cell {
     ) -> Self {
         Self {
             id,
-            position,
-            size,
             cur_resource,
             max_resource,
             regen_rate,

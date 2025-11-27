@@ -4,7 +4,6 @@ use crate::traits::Updatable;
 pub struct Agent {
     id: usize,
     cid: usize,
-    position: (u32, u32),
     consumption_rate: u32,
     allocated_resource: u32,
     health_point: u32,
@@ -15,7 +14,6 @@ impl Agent {
     pub fn new(
         id: usize,
         cid: usize,
-        position: (u32, u32),
         consumption_rate: u32,
         allocated_resource: u32,
         health_point: u32,
@@ -24,7 +22,6 @@ impl Agent {
         Self {
             id,
             cid,
-            position,
             consumption_rate,
             allocated_resource,
             health_point,
@@ -92,6 +89,10 @@ impl Agent {
 
     pub fn is_hungry(&self) -> bool {
         self.allocated_resource < self.consumption_rate
+    }
+
+    pub fn health_point(&self) -> u32 {
+        self.health_point
     }
 }
 

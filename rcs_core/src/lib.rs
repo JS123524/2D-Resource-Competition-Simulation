@@ -8,4 +8,4 @@ pub use agent::Agent;
 pub use cell::Cell;
 pub use errors::SimulationError;
 pub use traits::Updatable;
-pub use world::World;
+pub use world::{World, WorldConfig};

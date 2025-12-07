@@ -1,6 +1,18 @@
 use eframe::egui;
 use rcs_core::{World, WorldConfig};
 
+/// Draws the world grid and agents into the given `egui` UI.
+///
+/// Each cell is rendered as a colored rectangle, where the color encodes
+/// the current resource amount relative to [`WorldConfig::max_resource`].
+/// Living agents are rendered as circles centered in their current cell,
+/// with a color that fades as their health decreases.
+///
+/// ### Parameters
+/// - `ui`: Target [`egui::Ui`] to draw into.
+/// - `world`: The current world state (cells + agents).
+/// - `cfg`: The configuration used to interpret resource / HP ranges for colors.
+/// - `cell_px`: Size of each grid cell in screen pixels.
 pub fn draw_world(ui: &mut egui::Ui, world: &World, cfg: &WorldConfig, cell_px: f32) {
     let (width, height) = world.size();
     let world_width_px = width as f32 * cell_px;

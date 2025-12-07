@@ -4,6 +4,18 @@ use eframe::egui;
 use rcs_core::{Updatable, World, WorldConfig};
 
 use crate::world_view;
+
+/// Top-level GUI state for the 2-D resource competition simulation.
+///
+/// `SimulationApp` owns a [`World`] and its [`WorldConfig`], and is responsible
+/// for:
+///
+/// - driving the simulation step-by-step
+/// - exposing basic controls (reset, pause, single-step)
+/// - adjusting visualization parameters (cell size)
+/// - editing the world configuration before a reset
+///
+/// The app is integrated into `eframe` by implementing [`eframe::App`].
 pub struct SimulationApp {
     world: World,
     config: WorldConfig,
@@ -17,6 +29,13 @@ pub struct SimulationApp {
 }
 
 impl SimulationApp {
+    /// Creates a new simulation application using the default world config.
+    ///
+    /// This builds a [`WorldConfig::default`] and a corresponding [`World`],
+    /// sets a reasonable default cell size, and starts the simulation unpaused.
+    ///
+    /// ### Returns
+    /// A ready-to-run [`SimulationApp`] that can be passed to `eframe`.
     pub fn new() -> Self {
         let config = WorldConfig::default();
         let world = World::from_config(config);
@@ -34,6 +53,13 @@ impl SimulationApp {
 }
 
 impl eframe::App for SimulationApp {
+    /// Main UI update callback for the `eframe` application.
+    ///
+    /// This method:
+    /// - draws a top panel with simulation controls (reset, pause/resume, step)
+    /// - draws a side panel with view and configuration controls
+    /// - advances the simulation automatically when not paused
+    /// - renders the world in the central panel via [`world_view::draw_world`]
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             ui.horizontal(|ui| {
@@ -99,6 +125,19 @@ impl eframe::App for SimulationApp {
     }
 }
 
+/// Renders the interactive controls for editing a [`WorldConfig`].
+///
+/// This helper is used in the right-hand side panel to adjust:
+/// - world dimensions (`width × height`)
+/// - cell initial resource range and regeneration rate range
+/// - agent count and consumption-rate ranges
+/// - fixed initial agent health point
+///
+/// The values edited here only take effect after the user presses **Reset** button.
+///
+/// ### Parameters
+/// - `ui`: egui UI to draw into.
+/// - `cfg`: The configuration object to mutate in-place.
 fn world_config_ui(ui: &mut egui::Ui, cfg: &mut WorldConfig) {
     ui.heading("World Config");
     ui.label("World W x H:");
@@ -147,6 +186,6 @@ fn world_config_ui(ui: &mut egui::Ui, cfg: &mut WorldConfig) {
     ui.separator();
 
     ui.label("Agent HP (initial, fixed):");
-    ui.add(egui::DragValue::new(&mut cfg.agent_hp).range(1..=30));
+    ui.add(egui::DragValue::new(&mut cfg.agent_hp).range(1..=1000));
     ui.separator();
 }
